@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Flame, Dumbbell, Heart } from "lucide-react";
 import { GoalCard } from "./GoalCard";
+import { FrequencySelector } from "./FrequencySelector";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 type Goal = "weight-loss" | "muscle-gain" | "endurance" | null;
 
@@ -29,6 +31,7 @@ const goals = [
 
 export const GoalSelection = () => {
   const [selectedGoal, setSelectedGoal] = useState<Goal>(null);
+  const [selectedFrequency, setSelectedFrequency] = useState<number | null>(null);
 
   const handleContinue = () => {
     if (!selectedGoal) {
@@ -36,8 +39,13 @@ export const GoalSelection = () => {
       return;
     }
     
+    if (!selectedFrequency) {
+      toast.error("Please select your workout frequency");
+      return;
+    }
+    
     const goalTitle = goals.find(g => g.id === selectedGoal)?.title;
-    toast.success(`Great choice! Let's start your ${goalTitle} journey!`);
+    toast.success(`Perfect! ${goalTitle} with ${selectedFrequency}x/week workouts. Let's crush it! 💪`);
   };
 
   return (
@@ -52,7 +60,7 @@ export const GoalSelection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {goals.map((goal) => (
             <GoalCard
               key={goal.id}
@@ -65,10 +73,20 @@ export const GoalSelection = () => {
           ))}
         </div>
 
+        <div className={cn(
+          "transition-all duration-500 mb-8",
+          selectedGoal ? "opacity-100 animate-fade-in" : "opacity-0 pointer-events-none"
+        )}>
+          <FrequencySelector
+            selectedFrequency={selectedFrequency}
+            onSelect={setSelectedFrequency}
+          />
+        </div>
+
         <div className="flex justify-center">
           <Button
             onClick={handleContinue}
-            disabled={!selectedGoal}
+            disabled={!selectedGoal || !selectedFrequency}
             size="lg"
             className="px-12 py-6 text-lg font-semibold rounded-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
