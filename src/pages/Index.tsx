@@ -1,7 +1,7 @@
-import { GoalSelection } from "@/components/GoalSelection";
+import { ImprovedGoalSelection } from "@/components/ImprovedGoalSelection";
 
 const Index = () => {
-  return <GoalSelection />;
+  return <ImprovedGoalSelection />;
 };
 
 export default Index;
