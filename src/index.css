@@ -28,6 +28,12 @@ All colors MUST be HSL.
 
     --accent: 27 96% 61%;
     --accent-foreground: 0 0% 100%;
+    
+    --coral: 14 91% 64%;
+    --coral-foreground: 0 0% 100%;
+    
+    --teal: 178 78% 57%;
+    --teal-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -84,6 +90,12 @@ All colors MUST be HSL.
 
     --accent: 27 96% 61%;
     --accent-foreground: 0 0% 100%;
+    
+    --coral: 14 91% 64%;
+    --coral-foreground: 0 0% 100%;
+    
+    --teal: 178 78% 57%;
+    --teal-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;

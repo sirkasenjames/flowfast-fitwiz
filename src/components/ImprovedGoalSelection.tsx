@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Flame, Dumbbell, Heart, ArrowRight } from "lucide-react";
 import { EnhancedGoalCard } from "./EnhancedGoalCard";
 import { FrequencySelector } from "./FrequencySelector";
@@ -41,6 +42,7 @@ const goals = [
 ];
 
 export const ImprovedGoalSelection = () => {
+  const navigate = useNavigate();
   const [selectedGoal, setSelectedGoal] = useState<Goal>(null);
   const [selectedFrequency, setSelectedFrequency] = useState<number | null>(null);
   const [step, setStep] = useState<1 | 2>(1);
@@ -58,6 +60,11 @@ export const ImprovedGoalSelection = () => {
     toast.success(`🎉 Amazing! Your ${goalTitle} journey starts now!`, {
       description: `${selectedFrequency}x per week - You've got this!`,
     });
+    
+    // Navigate to daily plan after a short delay
+    setTimeout(() => {
+      navigate("/daily-plan");
+    }, 1000);
   };
 
   return (
