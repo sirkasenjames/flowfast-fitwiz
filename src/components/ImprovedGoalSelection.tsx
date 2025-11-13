@@ -61,9 +61,11 @@ export const ImprovedGoalSelection = () => {
       description: `${selectedFrequency}x per week - You've got this!`,
     });
     
-    // Navigate to daily plan after a short delay
+    // Navigate to daily plan with goal and frequency data
     setTimeout(() => {
-      navigate("/daily-plan");
+      localStorage.setItem('fitwiz-goal', selectedGoal);
+      localStorage.setItem('fitwiz-frequency', selectedFrequency.toString());
+      navigate("/daily-plan", { state: { goal: selectedGoal, frequency: selectedFrequency } });
     }, 1000);
   };
 
