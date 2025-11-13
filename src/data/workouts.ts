@@ -1,0 +1,371 @@
+import { Workout } from "@/types/workout";
+
+export const workoutsByGoal: Record<
+  "weight-loss" | "muscle-gain" | "endurance",
+  Workout[]
+> = {
+  "weight-loss": [
+    {
+      id: "wl-cardio-blast",
+      name: "Cardio Blast",
+      duration: "30 min",
+      description:
+        "High-intensity cardio session designed to maximize calorie burn. Get your heart pumping with dynamic movements that torch fat fast.",
+      accentColor: "coral",
+      goal: "weight-loss",
+      exercises: [
+        {
+          id: "wl-cardio-1",
+          name: "Jumping Jacks",
+          type: "time",
+          target: { time: 60 },
+          description: "Full-body cardio warmup to elevate heart rate",
+        },
+        {
+          id: "wl-cardio-2",
+          name: "High Knees",
+          type: "time",
+          target: { time: 45 },
+          description: "Explosive leg movement for maximum calorie burn",
+        },
+        {
+          id: "wl-cardio-3",
+          name: "Burpees",
+          type: "reps",
+          target: { sets: 3, reps: 10 },
+          description: "Ultimate fat-burning full-body exercise",
+        },
+        {
+          id: "wl-cardio-4",
+          name: "Mountain Climbers",
+          type: "time",
+          target: { time: 45 },
+          description: "Core and cardio combination movement",
+        },
+        {
+          id: "wl-cardio-5",
+          name: "Jump Squats",
+          type: "reps",
+          target: { sets: 3, reps: 12 },
+          description: "Plyometric lower body power exercise",
+        },
+      ],
+    },
+    {
+      id: "wl-hiit-core",
+      name: "HIIT Core Burn",
+      duration: "20 min",
+      description:
+        "Explosive core exercises that ignite fat loss. Quick, intense bursts targeting your midsection for maximum definition.",
+      accentColor: "teal",
+      goal: "weight-loss",
+      exercises: [
+        {
+          id: "wl-core-1",
+          name: "Plank Hold",
+          type: "time",
+          target: { time: 45 },
+          description: "Isometric core strength builder",
+        },
+        {
+          id: "wl-core-2",
+          name: "Russian Twists",
+          type: "reps",
+          target: { sets: 3, reps: 20 },
+          description: "Oblique targeting rotational movement",
+        },
+        {
+          id: "wl-core-3",
+          name: "Bicycle Crunches",
+          type: "reps",
+          target: { sets: 3, reps: 20 },
+          description: "Dynamic ab exercise for definition",
+        },
+        {
+          id: "wl-core-4",
+          name: "Leg Raises",
+          type: "reps",
+          target: { sets: 3, reps: 12 },
+          description: "Lower ab focused movement",
+        },
+      ],
+    },
+    {
+      id: "wl-yoga-flow",
+      name: "Fat-Burning Yoga",
+      duration: "25 min",
+      description:
+        "Active yoga flows that combine mindfulness with calorie burn. Stretch, strengthen, and sweat your way to your goals.",
+      accentColor: "primary",
+      goal: "weight-loss",
+      exercises: [
+        {
+          id: "wl-yoga-1",
+          name: "Sun Salutations",
+          type: "reps",
+          target: { sets: 5, reps: 1 },
+          description: "Full-body flow sequence",
+        },
+        {
+          id: "wl-yoga-2",
+          name: "Warrior II Hold",
+          type: "time",
+          target: { time: 30 },
+          description: "Strength-building standing pose (each side)",
+        },
+        {
+          id: "wl-yoga-3",
+          name: "Chair Pose Hold",
+          type: "time",
+          target: { time: 45 },
+          description: "Leg-burning isometric hold",
+        },
+        {
+          id: "wl-yoga-4",
+          name: "Boat Pose",
+          type: "time",
+          target: { time: 30 },
+          description: "Core-activating balance pose",
+        },
+      ],
+    },
+  ],
+  "muscle-gain": [
+    {
+      id: "mg-upper-circuit",
+      name: "Upper Strength Circuit",
+      duration: "45 min",
+      description:
+        "Progressive resistance training targeting chest, back, and shoulders. Build power and size with compound movements.",
+      accentColor: "coral",
+      goal: "muscle-gain",
+      exercises: [
+        {
+          id: "mg-upper-1",
+          name: "Push-ups",
+          type: "reps",
+          target: { sets: 4, reps: 12 },
+          description: "Chest and triceps builder",
+        },
+        {
+          id: "mg-upper-2",
+          name: "Dumbbell Rows",
+          type: "weight",
+          target: { sets: 4, reps: 10, weight: 15 },
+          description: "Back thickness and lat development",
+        },
+        {
+          id: "mg-upper-3",
+          name: "Shoulder Press",
+          type: "weight",
+          target: { sets: 3, reps: 10, weight: 12 },
+          description: "Overhead pressing for deltoid growth",
+        },
+        {
+          id: "mg-upper-4",
+          name: "Bicep Curls",
+          type: "weight",
+          target: { sets: 3, reps: 12, weight: 10 },
+          description: "Arm size and peak development",
+        },
+      ],
+    },
+    {
+      id: "mg-power-push",
+      name: "Power Push",
+      duration: "35 min",
+      description:
+        "Explosive push exercises designed for muscle growth. Heavy compound lifts that trigger hypertrophy and strength gains.",
+      accentColor: "teal",
+      goal: "muscle-gain",
+      exercises: [
+        {
+          id: "mg-push-1",
+          name: "Bench Press",
+          type: "weight",
+          target: { sets: 4, reps: 8, weight: 40 },
+          description: "Primary chest mass builder",
+        },
+        {
+          id: "mg-push-2",
+          name: "Incline Press",
+          type: "weight",
+          target: { sets: 3, reps: 10, weight: 30 },
+          description: "Upper chest development",
+        },
+        {
+          id: "mg-push-3",
+          name: "Tricep Dips",
+          type: "reps",
+          target: { sets: 3, reps: 12 },
+          description: "Tricep mass and definition",
+        },
+        {
+          id: "mg-push-4",
+          name: "Cable Flyes",
+          type: "weight",
+          target: { sets: 3, reps: 15, weight: 10 },
+          description: "Chest isolation and stretch",
+        },
+      ],
+    },
+    {
+      id: "mg-leg-build",
+      name: "Leg Day Build",
+      duration: "40 min",
+      description:
+        "Lower body strength training with progressive overload. Squats, lunges, and deadlifts to build massive leg strength.",
+      accentColor: "primary",
+      goal: "muscle-gain",
+      exercises: [
+        {
+          id: "mg-leg-1",
+          name: "Barbell Squats",
+          type: "weight",
+          target: { sets: 4, reps: 8, weight: 60 },
+          description: "King of leg exercises for overall mass",
+        },
+        {
+          id: "mg-leg-2",
+          name: "Romanian Deadlifts",
+          type: "weight",
+          target: { sets: 3, reps: 10, weight: 50 },
+          description: "Hamstring and glute development",
+        },
+        {
+          id: "mg-leg-3",
+          name: "Walking Lunges",
+          type: "reps",
+          target: { sets: 3, reps: 12 },
+          description: "Unilateral leg strength (per leg)",
+        },
+        {
+          id: "mg-leg-4",
+          name: "Calf Raises",
+          type: "weight",
+          target: { sets: 4, reps: 15, weight: 20 },
+          description: "Lower leg size and definition",
+        },
+      ],
+    },
+  ],
+  "endurance": [
+    {
+      id: "end-tempo-run",
+      name: "Tempo Run",
+      duration: "40 min",
+      description:
+        "Steady-state running at a challenging but sustainable pace. Build aerobic capacity and mental toughness.",
+      accentColor: "coral",
+      goal: "endurance",
+      exercises: [
+        {
+          id: "end-tempo-1",
+          name: "Warmup Jog",
+          type: "time",
+          target: { time: 300 },
+          description: "Easy pace to prepare body for work",
+        },
+        {
+          id: "end-tempo-2",
+          name: "Tempo Intervals",
+          type: "time",
+          target: { time: 600 },
+          description: "Sustained effort at threshold pace (repeat 3x with 2min rest)",
+        },
+        {
+          id: "end-tempo-3",
+          name: "Cooldown Jog",
+          type: "time",
+          target: { time: 300 },
+          description: "Easy recovery pace",
+        },
+      ],
+    },
+    {
+      id: "end-cycling-stamina",
+      name: "Cycling Stamina",
+      duration: "35 min",
+      description:
+        "Long-duration cycling session to boost cardiovascular endurance. Maintain consistent effort for maximum stamina gains.",
+      accentColor: "teal",
+      goal: "endurance",
+      exercises: [
+        {
+          id: "end-cycle-1",
+          name: "Easy Spin Warmup",
+          type: "time",
+          target: { time: 300 },
+          description: "Light resistance to warmup legs",
+        },
+        {
+          id: "end-cycle-2",
+          name: "Steady State Ride",
+          type: "time",
+          target: { time: 1200 },
+          description: "Moderate intensity sustained effort",
+        },
+        {
+          id: "end-cycle-3",
+          name: "Hill Climbs",
+          type: "reps",
+          target: { sets: 5, reps: 1 },
+          description: "High resistance intervals (60s work, 60s rest)",
+        },
+        {
+          id: "end-cycle-4",
+          name: "Cooldown Spin",
+          type: "time",
+          target: { time: 300 },
+          description: "Easy spinning to flush legs",
+        },
+      ],
+    },
+    {
+      id: "end-mobility-flow",
+      name: "Full-Body Mobility Flow",
+      duration: "30 min",
+      description:
+        "Dynamic stretching and mobility work to enhance range of motion. Keep your body resilient and ready for long efforts.",
+      accentColor: "primary",
+      goal: "endurance",
+      exercises: [
+        {
+          id: "end-mob-1",
+          name: "World's Greatest Stretch",
+          type: "reps",
+          target: { sets: 2, reps: 5 },
+          description: "Full-body mobility sequence (each side)",
+        },
+        {
+          id: "end-mob-2",
+          name: "Cat-Cow Flow",
+          type: "reps",
+          target: { sets: 3, reps: 10 },
+          description: "Spinal mobility and breathing",
+        },
+        {
+          id: "end-mob-3",
+          name: "Hip Circles",
+          type: "reps",
+          target: { sets: 2, reps: 10 },
+          description: "Hip joint mobility (each direction)",
+        },
+        {
+          id: "end-mob-4",
+          name: "Shoulder Dislocates",
+          type: "reps",
+          target: { sets: 3, reps: 10 },
+          description: "Shoulder range and stability",
+        },
+        {
+          id: "end-mob-5",
+          name: "Pigeon Pose Hold",
+          type: "time",
+          target: { time: 60 },
+          description: "Deep hip opener stretch (each side)",
+        },
+      ],
+    },
+  ],
+};

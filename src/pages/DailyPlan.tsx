@@ -1,72 +1,10 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { WorkoutCard } from "@/components/WorkoutCard";
+import { GuidedWorkoutCard } from "@/components/GuidedWorkoutCard";
 import { Sparkles } from "lucide-react";
+import { workoutsByGoal } from "@/data/workouts";
 
 type Goal = "weight-loss" | "muscle-gain" | "endurance";
-
-const workoutsByGoal = {
-  "weight-loss": [
-    {
-      name: "Cardio Blast",
-      duration: "30 min",
-      description: "High-intensity cardio session designed to maximize calorie burn. Get your heart pumping with dynamic movements that torch fat fast.",
-      accentColor: "coral" as const,
-    },
-    {
-      name: "HIIT Core Burn",
-      duration: "20 min",
-      description: "Explosive core exercises that ignite fat loss. Quick, intense bursts targeting your midsection for maximum definition.",
-      accentColor: "teal" as const,
-    },
-    {
-      name: "Fat-Burning Yoga",
-      duration: "25 min",
-      description: "Active yoga flows that combine mindfulness with calorie burn. Stretch, strengthen, and sweat your way to your goals.",
-      accentColor: "primary" as const,
-    },
-  ],
-  "muscle-gain": [
-    {
-      name: "Upper Strength Circuit",
-      duration: "45 min",
-      description: "Progressive resistance training targeting chest, back, and shoulders. Build power and size with compound movements.",
-      accentColor: "coral" as const,
-    },
-    {
-      name: "Power Push",
-      duration: "35 min",
-      description: "Explosive push exercises designed for muscle growth. Heavy compound lifts that trigger hypertrophy and strength gains.",
-      accentColor: "teal" as const,
-    },
-    {
-      name: "Leg Day Build",
-      duration: "40 min",
-      description: "Lower body strength training with progressive overload. Squats, lunges, and deadlifts to build massive leg strength.",
-      accentColor: "primary" as const,
-    },
-  ],
-  "endurance": [
-    {
-      name: "Tempo Run",
-      duration: "40 min",
-      description: "Steady-state running at a challenging but sustainable pace. Build aerobic capacity and mental toughness.",
-      accentColor: "coral" as const,
-    },
-    {
-      name: "Cycling Stamina",
-      duration: "35 min",
-      description: "Long-duration cycling session to boost cardiovascular endurance. Maintain consistent effort for maximum stamina gains.",
-      accentColor: "teal" as const,
-    },
-    {
-      name: "Full-Body Mobility Flow",
-      duration: "30 min",
-      description: "Dynamic stretching and mobility work to enhance range of motion. Keep your body resilient and ready for long efforts.",
-      accentColor: "primary" as const,
-    },
-  ],
-};
 
 const goalTitles = {
   "weight-loss": "Weight Loss",
@@ -136,11 +74,11 @@ const DailyPlan = () => {
           
           {workouts.map((workout, index) => (
             <div
-              key={workout.name}
+              key={workout.id}
               className="animate-fade-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <WorkoutCard {...workout} />
+              <GuidedWorkoutCard workout={workout} />
             </div>
           ))}
         </div>
