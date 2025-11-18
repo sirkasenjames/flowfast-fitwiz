@@ -5,6 +5,7 @@ import { ExerciseTracker } from "@/components/ExerciseTracker";
 import { cn } from "@/lib/utils";
 import { Clock, ChevronDown, ChevronUp, Sparkles, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import {
   saveWorkoutPerformance,
   getPreviousPerformance,
@@ -23,24 +24,36 @@ export const GuidedWorkoutCard = ({ workout }: GuidedWorkoutCardProps) => {
   const [adaptedExercises, setAdaptedExercises] = useState(workout.exercises);
 
   useEffect(() => {
-    // Check if this workout was already completed today
-    const todayKey = `fitwiz-performance-${getTodayDateString()}`;
-    const todayPerformance = localStorage.getItem(todayKey);
-    
-    if (todayPerformance) {
-      const performance: WorkoutPerformance = JSON.parse(todayPerformance);
-      if (performance.workoutId === workout.id && performance.completed) {
-        setIsCompleted(true);
-        setExerciseLogs(performance.exercises);
-      }
-    }
+    const checkIfCompleted = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-    // Adapt workout based on previous performance
-    const previousPerformance = getPreviousPerformance(workout.id);
-    if (previousPerformance) {
-      const adapted = adaptWorkout(workout.exercises, previousPerformance);
-      setAdaptedExercises(adapted);
-    }
+      const todayKey = getTodayDateString();
+      const { data, error } = await supabase
+        .from("workout_performance")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("workout_id", workout.id)
+        .eq("date", todayKey)
+        .eq("completed", true)
+        .maybeSingle();
+
+      if (data) {
+        setIsCompleted(true);
+        setExerciseLogs(data.exercises as unknown as WorkoutLog[]);
+      }
+    };
+
+    const loadAdaptedWorkout = async () => {
+      const previousPerformance = await getPreviousPerformance(workout.id);
+      if (previousPerformance) {
+        const adapted = adaptWorkout(workout.exercises, previousPerformance);
+        setAdaptedExercises(adapted);
+      }
+    };
+
+    checkIfCompleted();
+    loadAdaptedWorkout();
   }, [workout]);
 
   const handleStartWorkout = () => {
@@ -58,7 +71,7 @@ export const GuidedWorkoutCard = ({ workout }: GuidedWorkoutCardProps) => {
     });
   };
 
-  const handleCompleteWorkout = () => {
+  const handleCompleteWorkout = async () => {
     const performance: WorkoutPerformance = {
       workoutId: workout.id,
       date: getTodayDateString(),
@@ -67,7 +80,7 @@ export const GuidedWorkoutCard = ({ workout }: GuidedWorkoutCardProps) => {
       completed: true,
     };
 
-    saveWorkoutPerformance(performance);
+    await saveWorkoutPerformance(performance);
     setIsCompleted(true);
     setIsExpanded(false);
 
