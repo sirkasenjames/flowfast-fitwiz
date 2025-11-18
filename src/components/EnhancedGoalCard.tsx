@@ -38,7 +38,7 @@ export const EnhancedGoalCard = ({
           src={heroImage} 
           alt={title}
           className={cn(
-            "w-full h-full object-cover transition-all duration-700",
+            "w-full h-full object-cover object-top transition-all duration-700",
             isSelected ? "scale-110 brightness-110" : "scale-100 brightness-90 group-hover:scale-105 group-hover:brightness-100"
           )}
         />
