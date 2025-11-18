@@ -14,7 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_workouts: {
+        Row: {
+          created_at: string
+          goal: string
+          id: string
+          updated_at: string
+          user_id: string
+          workout_data: Json
+        }
+        Insert: {
+          created_at?: string
+          goal: string
+          id?: string
+          updated_at?: string
+          user_id: string
+          workout_data: Json
+        }
+        Update: {
+          created_at?: string
+          goal?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+          workout_data?: Json
+        }
+        Relationships: []
+      }
+      workout_performance: {
+        Row: {
+          completed: boolean
+          created_at: string
+          date: string
+          exercises: Json
+          id: string
+          total_duration: number
+          user_id: string
+          workout_id: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          date: string
+          exercises: Json
+          id?: string
+          total_duration: number
+          user_id: string
+          workout_id: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          date?: string
+          exercises?: Json
+          id?: string
+          total_duration?: number
+          user_id?: string
+          workout_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
