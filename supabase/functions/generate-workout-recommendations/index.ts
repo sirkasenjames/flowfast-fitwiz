@@ -28,10 +28,12 @@ Generate exactly 3 complete workout routines for someone focused on ${goal}.
 Each workout should include:
 - A compelling name (4-6 words)
 - A motivational description (20-30 words)
-- Duration in minutes
+- Duration in minutes (just the number)
 - 5-6 specific exercises with details
 
 Focus: ${goalDescriptions[goal as keyof typeof goalDescriptions] || goalDescriptions['weight-loss']}
+
+CRITICAL: The target field must be a structured object, not a string.
 
 Return ONLY valid JSON in this exact structure:
 {
@@ -39,18 +41,31 @@ Return ONLY valid JSON in this exact structure:
     {
       "name": "Workout Name",
       "description": "Motivational description",
-      "duration": "25 min",
+      "duration": "25",
       "exercises": [
         {
           "name": "Exercise Name",
           "type": "reps|time|weight",
-          "target": "3 sets x 12 reps|30 seconds|3 sets x 10 reps @ 15 lbs",
+          "target": {
+            "sets": 3,
+            "reps": 12
+          },
           "description": "How to perform the exercise properly"
         }
       ]
     }
   ]
-}`;
+}
+
+Examples of target objects:
+- For reps: {"sets": 3, "reps": 12}
+- For time: {"time": 60} (time in seconds)
+- For weight: {"sets": 3, "reps": 10, "weight": 20} (weight in lbs or kg)
+
+Type guidelines:
+- Use "reps" for bodyweight exercises with sets and reps
+- Use "time" for duration-based exercises (provide time in seconds)
+- Use "weight" for exercises using dumbbells, barbells, or other weights`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -88,11 +103,13 @@ Return ONLY valid JSON in this exact structure:
       throw new Error('Invalid response format from AI');
     }
 
-    // Add IDs and accent colors to the workouts
+    // Add IDs, accent colors, and goal to the workouts
     const accentColors = ['coral', 'teal', 'primary'];
     const workoutsWithMetadata = workoutData.workouts.map((workout: any, index: number) => ({
       ...workout,
       id: `ai-${goal}-${Date.now()}-${index}`,
+      goal: goal,
+      duration: workout.duration.includes('min') ? workout.duration : `${workout.duration} min`,
       accentColor: accentColors[index % accentColors.length],
       exercises: workout.exercises.map((exercise: any, exerciseIndex: number) => ({
         ...exercise,
