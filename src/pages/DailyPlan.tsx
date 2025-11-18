@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GuidedWorkoutCard } from "@/components/GuidedWorkoutCard";
-import { Sparkles, Wand2 } from "lucide-react";
+import { Sparkles, Wand2, LogOut, User, ArrowLeft } from "lucide-react";
 import { workoutsByGoal } from "@/data/workouts";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { Workout } from "@/types/workout";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { useAuth } from "@/hooks/useAuth";
 
 type Goal = "weight-loss" | "muscle-gain" | "endurance";
 
@@ -19,6 +21,7 @@ const goalTitles = {
 const DailyPlan = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
   const [goal, setGoal] = useState<Goal | null>(null);
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -85,8 +88,38 @@ const DailyPlan = () => {
     return sum + parseInt(workout.duration);
   }, 0);
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
+    <ProtectedRoute>
+      <div className="min-h-screen bg-background p-4 md:p-8">
+        {/* Top Navigation */}
+        <div className="max-w-4xl mx-auto mb-6 flex items-center justify-between">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/")}
+            className="gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Goals
+          </Button>
+          
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border">
+              <User className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm font-medium">{user?.email}</span>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={signOut}
+              className="gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </Button>
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto">
         {/* Motivational Quote Header */}
         <div className="text-center mb-12 animate-fade-in">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-coral/10 via-teal/10 to-primary/10 rounded-full mb-6">
@@ -145,6 +178,7 @@ const DailyPlan = () => {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

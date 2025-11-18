@@ -1,4 +1,73 @@
-import { Exercise, WorkoutPerformance } from "@/types/workout";
+import { Exercise, WorkoutPerformance, WorkoutLog } from "@/types/workout";
+import { supabase } from "@/integrations/supabase/client";
+
+const PROGRESSION_INCREMENT = 1.1; // 10% increase
+const PROGRESSION_DECREMENT = 0.9; // 10% decrease
+const PERFORMANCE_THRESHOLD_HIGH = 1.2; // User performed 20% above target
+const PERFORMANCE_THRESHOLD_LOW = 0.8; // User performed 20% below target
+
+export const getTodayDateString = (): string => {
+  return new Date().toISOString().split("T")[0];
+};
+
+export const saveWorkoutPerformance = async (
+  performance: WorkoutPerformance
+): Promise<void> => {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      console.error("No user found");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("workout_performance")
+      .insert([{
+        user_id: user.id,
+        workout_id: performance.workoutId,
+        date: performance.date,
+        exercises: performance.exercises as any,
+        total_duration: performance.totalDuration,
+        completed: performance.completed,
+      }]);
+
+    if (error) throw error;
+  } catch (error) {
+    console.error("Error saving workout performance:", error);
+  }
+};
+
+export const getPreviousPerformance = async (
+  workoutId: string
+): Promise<WorkoutPerformance | null> => {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return null;
+
+    const { data, error } = await supabase
+      .from("workout_performance")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("workout_id", workoutId)
+      .eq("completed", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error || !data) return null;
+
+    return {
+      workoutId: data.workout_id,
+      date: data.date,
+      exercises: data.exercises as unknown as WorkoutLog[],
+      totalDuration: data.total_duration,
+      completed: data.completed,
+    };
+  } catch (error) {
+    console.error("Error fetching previous performance:", error);
+    return null;
+  }
+};
 
 /**
  * Adapts workout difficulty based on previous performance
@@ -137,50 +206,4 @@ function decreaseExerciseDifficulty(exercise: Exercise): Exercise {
     default:
       return exercise;
   }
-}
-
-/**
- * Store workout performance in localStorage
- */
-export function saveWorkoutPerformance(performance: WorkoutPerformance): void {
-  const key = `fitwiz-performance-${performance.date}`;
-  const existingData = localStorage.getItem("fitwiz-all-performances");
-  const allPerformances: WorkoutPerformance[] = existingData
-    ? JSON.parse(existingData)
-    : [];
-
-  // Remove any existing entry for the same workout on the same date
-  const filtered = allPerformances.filter(
-    (p) => !(p.workoutId === performance.workoutId && p.date === performance.date)
-  );
-
-  filtered.push(performance);
-  localStorage.setItem("fitwiz-all-performances", JSON.stringify(filtered));
-  localStorage.setItem(key, JSON.stringify(performance));
-}
-
-/**
- * Get previous performance for a specific workout
- */
-export function getPreviousPerformance(
-  workoutId: string
-): WorkoutPerformance | undefined {
-  const existingData = localStorage.getItem("fitwiz-all-performances");
-  if (!existingData) return undefined;
-
-  const allPerformances: WorkoutPerformance[] = JSON.parse(existingData);
-  
-  // Get the most recent completed performance for this workout
-  const performances = allPerformances
-    .filter((p) => p.workoutId === workoutId && p.completed)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  return performances[0];
-}
-
-/**
- * Get today's date string
- */
-export function getTodayDateString(): string {
-  return new Date().toISOString().split("T")[0];
 }
