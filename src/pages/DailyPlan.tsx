@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GuidedWorkoutCard } from "@/components/GuidedWorkoutCard";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Wand2 } from "lucide-react";
 import { workoutsByGoal } from "@/data/workouts";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import type { Workout } from "@/types/workout";
 
 type Goal = "weight-loss" | "muscle-gain" | "endurance";
 
@@ -16,6 +20,9 @@ const DailyPlan = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [goal, setGoal] = useState<Goal | null>(null);
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showAIWorkouts, setShowAIWorkouts] = useState(false);
 
   useEffect(() => {
     // Get goal from navigation state or localStorage
@@ -24,19 +31,55 @@ const DailyPlan = () => {
     
     if (stateGoal) {
       setGoal(stateGoal);
+      setWorkouts(workoutsByGoal[stateGoal]);
     } else if (storedGoal) {
       setGoal(storedGoal);
+      setWorkouts(workoutsByGoal[storedGoal]);
     } else {
       // No goal found, redirect to home
       navigate('/');
     }
   }, [location, navigate]);
 
+  const generateAIRecommendations = async () => {
+    if (!goal) return;
+    
+    setIsGenerating(true);
+    toast.loading("AI is crafting your personalized workouts...", { id: "ai-generation" });
+
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-workout-recommendations', {
+        body: { goal }
+      });
+
+      if (error) throw error;
+
+      if (data?.workouts && data.workouts.length > 0) {
+        setWorkouts(data.workouts);
+        setShowAIWorkouts(true);
+        toast.success("AI workouts generated!", {
+          id: "ai-generation",
+          description: `${data.workouts.length} personalized workouts ready for you! 🎯`,
+          icon: "✨",
+        });
+      } else {
+        throw new Error("No workouts generated");
+      }
+    } catch (error) {
+      console.error('Error generating AI recommendations:', error);
+      toast.error("Failed to generate AI recommendations", {
+        id: "ai-generation",
+        description: "Please try again in a moment.",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   if (!goal) {
     return null;
   }
 
-  const workouts = workoutsByGoal[goal];
   const goalTitle = goalTitles[goal];
   const totalDuration = workouts.reduce((sum, workout) => {
     return sum + parseInt(workout.duration);
@@ -65,12 +108,23 @@ const DailyPlan = () => {
 
         {/* Workout Cards */}
         <div className="space-y-4 animate-scale-in">
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            Today's Workouts
-            <span className="text-sm font-normal text-muted-foreground">
-              • 3 sessions • {totalDuration} min total
-            </span>
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold flex items-center gap-2">
+              {showAIWorkouts ? "AI-Generated Workouts" : "Today's Workouts"}
+              <span className="text-sm font-normal text-muted-foreground">
+                • {workouts.length} sessions • {totalDuration} min total
+              </span>
+            </h2>
+            <Button
+              onClick={generateAIRecommendations}
+              disabled={isGenerating}
+              className="font-semibold"
+              variant="outline"
+            >
+              <Wand2 className="w-4 h-4 mr-2" />
+              {isGenerating ? "Generating..." : "Generate AI Plan"}
+            </Button>
+          </div>
           
           {workouts.map((workout, index) => (
             <div
