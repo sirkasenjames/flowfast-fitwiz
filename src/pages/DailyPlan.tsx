@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { GuidedWorkoutCard } from "@/components/GuidedWorkoutCard";
 import { CheckInDialog } from "@/components/CheckInDialog";
 import { CompletionDialog } from "@/components/CompletionDialog";
+import { BottomNav } from "@/components/BottomNav";
 import { Sparkles, LogOut, User, ArrowLeft, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -347,6 +348,8 @@ const DailyPlan = () => {
         weeklyStreak={weeklyStreak}
         monthlyTotal={monthlyTotal}
       />
+      
+      <BottomNav />
     </ProtectedRoute>
   );
 };
