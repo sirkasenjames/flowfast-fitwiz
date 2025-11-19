@@ -4,7 +4,7 @@ import { GuidedWorkoutCard } from "@/components/GuidedWorkoutCard";
 import { CheckInDialog } from "@/components/CheckInDialog";
 import { CompletionDialog } from "@/components/CompletionDialog";
 import { BottomNav } from "@/components/BottomNav";
-import { Sparkles, LogOut, User, ArrowLeft, Calendar } from "lucide-react";
+import { Sparkles, LogOut, User, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -220,17 +220,7 @@ const DailyPlan = () => {
     <ProtectedRoute>
       <div className="min-h-screen bg-background p-4 md:p-8">
         {/* Top Navigation */}
-        <div className="max-w-4xl mx-auto mb-6 flex items-center justify-between">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate("/")}
-            className="gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Goals
-          </Button>
-          
+        <div className="max-w-4xl mx-auto mb-6 flex items-center justify-end">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border">
               <User className="w-4 h-4 text-muted-foreground" />
