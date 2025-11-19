@@ -273,7 +273,7 @@ const DailyPlan = () => {
           </div>
 
           {/* Main Content Area */}
-          {!hasCheckedIn && !hasCompletedToday && (
+          {!hasCompletedToday && (!hasCheckedIn || workouts.length === 0) && (
             <div className="text-center py-12 animate-fade-in">
               <div className="max-w-md mx-auto space-y-6">
                 <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-r from-coral via-teal to-primary flex items-center justify-center">
