@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { User, Target, LogOut } from "lucide-react";
+import { User, Target, LogOut, Dumbbell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 type Goal = "weight-loss" | "muscle-gain" | "endurance";
@@ -26,12 +26,14 @@ export default function Settings() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [goal, setGoal] = useState<Goal>("weight-loss");
+  const [frequency, setFrequency] = useState<number>(3);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
       loadProfile();
       loadGoal();
+      loadFrequency();
     }
   }, [user]);
 
@@ -54,6 +56,13 @@ export default function Settings() {
     const storedGoal = localStorage.getItem('userGoal') as Goal;
     if (storedGoal) {
       setGoal(storedGoal);
+    }
+  };
+
+  const loadFrequency = () => {
+    const storedFrequency = localStorage.getItem('workoutFrequency');
+    if (storedFrequency) {
+      setFrequency(parseInt(storedFrequency));
     }
   };
 
@@ -83,7 +92,8 @@ export default function Settings() {
 
   const handleSaveGoal = () => {
     localStorage.setItem('userGoal', goal);
-    toast.success("Fitness goal updated!");
+    localStorage.setItem('workoutFrequency', frequency.toString());
+    toast.success("Fitness goal and frequency updated!");
   };
 
   return (
@@ -141,7 +151,7 @@ export default function Settings() {
                 <Target className="w-5 h-5 text-coral" />
                 Fitness Goal
               </CardTitle>
-              <CardDescription>Change your primary fitness goal</CardDescription>
+              <CardDescription>Change your primary fitness goal and workout frequency</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -157,11 +167,26 @@ export default function Settings() {
                   </SelectContent>
                 </Select>
               </div>
+              <div>
+                <Label htmlFor="frequency">Workout Frequency</Label>
+                <Select value={frequency.toString()} onValueChange={(value) => setFrequency(parseInt(value))}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="2">2x per week</SelectItem>
+                    <SelectItem value="3">3x per week</SelectItem>
+                    <SelectItem value="4">4x per week</SelectItem>
+                    <SelectItem value="5">5x per week</SelectItem>
+                    <SelectItem value="6">6+ per week</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <Button 
                 onClick={handleSaveGoal}
                 className="w-full"
               >
-                Update Goal
+                Update Goal & Frequency
               </Button>
             </CardContent>
           </Card>
