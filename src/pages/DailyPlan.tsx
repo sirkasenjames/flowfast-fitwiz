@@ -135,13 +135,18 @@ const DailyPlan = () => {
   };
 
   const handleCheckInSubmit = async (bodyBattery: number, availableTime: number) => {
-    if (!user || !goal) return;
+    if (!user || !goal) {
+      console.error('Missing user or goal:', { user: !!user, goal });
+      toast.error("Session error. Please refresh the page.");
+      return;
+    }
 
     setIsGenerating(true);
     toast.loading("Creating your personalized workout...", { id: "workout-generation" });
 
     try {
       // Save check-in
+      console.log('Saving check-in:', { bodyBattery, availableTime, goal });
       const { error: checkinError } = await supabase
         .from('daily_checkins')
         .insert({
@@ -151,9 +156,13 @@ const DailyPlan = () => {
           available_time: availableTime
         });
 
-      if (checkinError) throw checkinError;
+      if (checkinError) {
+        console.error('Check-in error:', checkinError);
+        throw checkinError;
+      }
 
       // Generate workouts based on check-in data
+      console.log('Calling edge function with:', { goal, bodyBattery, availableTime });
       const { data, error } = await supabase.functions.invoke('generate-personalized-workout', {
         body: { 
           goal,
@@ -162,9 +171,15 @@ const DailyPlan = () => {
         }
       });
 
-      if (error) throw error;
+      console.log('Edge function response:', { data, error });
+
+      if (error) {
+        console.error('Edge function error:', error);
+        throw error;
+      }
 
       if (data?.workouts && data.workouts.length > 0) {
+        console.log('Workouts generated:', data.workouts.length);
         setWorkouts(data.workouts);
         setHasCheckedIn(true);
         toast.success("Your workout plan is ready!", {
@@ -172,13 +187,14 @@ const DailyPlan = () => {
           description: `${data.workouts.length} personalized workouts based on your energy and time`,
         });
       } else {
+        console.error('No workouts in response:', data);
         throw new Error("No workouts generated");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating workout:', error);
       toast.error("Failed to generate workout plan", {
         id: "workout-generation",
-        description: "Please try again in a moment.",
+        description: error?.message || "Please try again in a moment.",
       });
     } finally {
       setIsGenerating(false);
