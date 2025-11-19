@@ -58,14 +58,15 @@ export const ImprovedGoalSelection = () => {
     
     const goalTitle = goals.find(g => g.id === selectedGoal)?.title;
     toast.success(`🎉 Amazing! Your ${goalTitle} journey starts now!`, {
-      description: `${selectedFrequency}x per week - You've got this!`,
+      description: `${selectedFrequency}x per week - Let's create your account!`,
     });
     
-    // Navigate to daily plan with goal and frequency data
+    // Save goal and frequency, then navigate to signup
+    localStorage.setItem('fitwiz-goal', selectedGoal);
+    localStorage.setItem('fitwiz-frequency', selectedFrequency.toString());
+    
     setTimeout(() => {
-      localStorage.setItem('fitwiz-goal', selectedGoal);
-      localStorage.setItem('fitwiz-frequency', selectedFrequency.toString());
-      navigate("/daily-plan", { state: { goal: selectedGoal, frequency: selectedFrequency } });
+      navigate("/signup", { state: { goal: selectedGoal, frequency: selectedFrequency } });
     }, 1000);
   };
 

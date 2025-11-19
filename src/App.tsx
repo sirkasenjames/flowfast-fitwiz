@@ -9,6 +9,7 @@ import Calendar from "./pages/Calendar";
 import Progress from "./pages/Progress";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
+import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/daily-plan" element={<DailyPlan />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/progress" element={<Progress />} />
