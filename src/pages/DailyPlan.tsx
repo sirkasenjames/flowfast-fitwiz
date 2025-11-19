@@ -4,7 +4,7 @@ import { GuidedWorkoutCard } from "@/components/GuidedWorkoutCard";
 import { CheckInDialog } from "@/components/CheckInDialog";
 import { CompletionDialog } from "@/components/CompletionDialog";
 import { BottomNav } from "@/components/BottomNav";
-import { Sparkles, LogOut, User, Calendar } from "lucide-react";
+import { Sparkles, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -23,7 +23,7 @@ const goalTitles = {
 const DailyPlan = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const [goal, setGoal] = useState<Goal | null>(null);
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -219,25 +219,6 @@ const DailyPlan = () => {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-background p-4 md:p-8">
-        {/* Top Navigation */}
-        <div className="max-w-4xl mx-auto mb-6 flex items-center justify-end">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border">
-              <User className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium">{user?.email}</span>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={signOut}
-              className="gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign Out
-            </Button>
-          </div>
-        </div>
-
         <div className="max-w-4xl mx-auto">
           {/* Header with Date */}
           <div className="text-center mb-8 animate-fade-in">
