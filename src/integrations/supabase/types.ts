@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      daily_checkins: {
+        Row: {
+          available_time: number
+          body_battery: number
+          created_at: string
+          date: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          available_time: number
+          body_battery: number
+          created_at?: string
+          date: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          available_time?: number
+          body_battery?: number
+          created_at?: string
+          date?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
