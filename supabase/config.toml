@@ -1,1 +1,10 @@
 project_id = "sfqaczejgunxlftlkfnv"
+
+[functions.generate-workout-recommendations]
+verify_jwt = false
+
+[functions.generate-personalized-workout]
+verify_jwt = false
+
+[functions.seed-demo-users]
+verify_jwt = false

@@ -15,9 +15,10 @@ import {
 
 interface GuidedWorkoutCardProps {
   workout: Workout;
+  onComplete?: () => void;
 }
 
-export const GuidedWorkoutCard = ({ workout }: GuidedWorkoutCardProps) => {
+export const GuidedWorkoutCard = ({ workout, onComplete }: GuidedWorkoutCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [exerciseLogs, setExerciseLogs] = useState<WorkoutLog[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -72,6 +73,9 @@ export const GuidedWorkoutCard = ({ workout }: GuidedWorkoutCardProps) => {
   };
 
   const handleCompleteWorkout = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
     const performance: WorkoutPerformance = {
       workoutId: workout.id,
       date: getTodayDateString(),
@@ -80,28 +84,19 @@ export const GuidedWorkoutCard = ({ workout }: GuidedWorkoutCardProps) => {
       completed: true,
     };
 
-    await saveWorkoutPerformance(performance);
-    setIsCompleted(true);
-    setIsExpanded(false);
-
-    // Calculate completion percentage for motivation
-    const completionRate =
-      (exerciseLogs.length / workout.exercises.length) * 100;
-    
-    const messages = [
-      "You crushed today's circuit! Let's keep that streak going. 🔥",
-      "Amazing work! Your body is already getting stronger. 💪",
-      "That's how champions train! See you tomorrow. ⭐",
-      "Incredible effort! You're one step closer to your goal. 🎯",
-    ];
-
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-
-    toast.success(randomMessage, {
-      description: `${exerciseLogs.length}/${workout.exercises.length} exercises logged (${Math.round(completionRate)}%)`,
-      icon: "🎉",
-      duration: 5000,
-    });
+    try {
+      await saveWorkoutPerformance(performance);
+      setIsCompleted(true);
+      
+      // Call parent's onComplete callback
+      if (onComplete) {
+        onComplete();
+      }
+    } catch (error) {
+      toast.error("Failed to save workout", {
+        description: "Your progress couldn't be saved. Please try again.",
+      });
+    }
   };
 
   const colorClasses = {
