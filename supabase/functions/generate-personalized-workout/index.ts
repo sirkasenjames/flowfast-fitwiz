@@ -108,8 +108,12 @@ Guidelines:
 
     let workoutData;
     try {
-      const content = data.choices[0].message.content;
-      workoutData = JSON.parse(content);
+      const rawContent = data.choices[0].message.content as string;
+      const cleanedContent = rawContent
+        .replace(/```json\s*/g, "")
+        .replace(/```/g, "")
+        .trim();
+      workoutData = JSON.parse(cleanedContent);
     } catch (parseError) {
       console.error('Failed to parse OpenAI response:', parseError);
       throw new Error('Invalid response format from AI');
