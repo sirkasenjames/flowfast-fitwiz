@@ -82,7 +82,7 @@ const Auth = () => {
 
         if (data.user) {
           toast.success("Welcome back! 💪");
-          navigate("/");
+          navigate("/daily-plan");
         }
       } else {
         const { data, error } = await supabase.auth.signUp({
@@ -107,7 +107,7 @@ const Auth = () => {
 
         if (data.user) {
           toast.success("Account created! Welcome to FitWiz! 🎉");
-          navigate("/");
+          navigate("/daily-plan");
         }
       }
     } catch (error) {
@@ -133,7 +133,7 @@ const Auth = () => {
 
       if (data.user) {
         toast.success(`Welcome back, ${demoEmail.split("@")[0]}! 💪`);
-        navigate("/");
+        navigate("/daily-plan");
       }
     } catch (error) {
       console.error("Demo login error:", error);
