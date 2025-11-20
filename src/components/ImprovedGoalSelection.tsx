@@ -81,11 +81,11 @@ export const ImprovedGoalSelection = () => {
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-tight">
-            {step === 1 ? "What's Your Fitness Goal?" : "How Often Will You Train?"}
+            {step === 1 ? "Choose Your Path." : "How Often Will You Train?"}
           </h1>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             {step === 1 
-              ? "Choose the path that excites you most. Every champion started with a single decision." 
+              ? "Choose your goal, then choose your frequency. Start your journey and create an account to get your first daily workout." 
               : "Consistency beats intensity. Pick a schedule you can maintain."}
           </p>
         </div>
