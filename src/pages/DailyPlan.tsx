@@ -145,15 +145,17 @@ const DailyPlan = () => {
     toast.loading("Creating your personalized workout...", { id: "workout-generation" });
 
     try {
-      // Save check-in
+      // Save check-in (upsert to handle multiple check-ins on same day)
       console.log('Saving check-in:', { bodyBattery, availableTime, goal });
       const { error: checkinError } = await supabase
         .from('daily_checkins')
-        .insert({
+        .upsert({
           user_id: user.id,
           date: getTodayDateString(),
           body_battery: bodyBattery,
           available_time: availableTime
+        }, {
+          onConflict: 'user_id,date'
         });
 
       if (checkinError) {
